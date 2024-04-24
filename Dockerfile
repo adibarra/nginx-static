@@ -1,9 +1,7 @@
-# BUILDER
 FROM alpine AS builder
 
 ARG DEP_DEV="alpine-sdk zlib-dev pcre-dev openssl-dev gd-dev"
 RUN apk add --no-cache ${DEP_DEV}
-
 
 WORKDIR /build
 ARG NGINX=1.21.6
@@ -18,7 +16,6 @@ RUN make
 RUN make install
 
 
-# RUNNER
 FROM alpine
 
 ARG DEP_RUN="pcre openssl gd tzdata"
@@ -27,9 +24,6 @@ COPY --from=builder /usr/local/nginx /usr/local/nginx
 RUN apk add --no-cache ${DEP_RUN} \
 	&& ln -sf /dev/stdout /usr/local/nginx/logs/access.log \
 	&& ln -sf /dev/stderr /usr/local/nginx/logs/error.log
-COPY ./conf/nginx.conf /usr/local/nginx/conf/nginx.conf
-COPY ./conf/default.conf /usr/local/nginx/conf/sites/default.conf
 
 EXPOSE 80
 STOPSIGNAL SIGTERM
-CMD ["/usr/local/nginx/sbin/nginx", "-g", "daemon off;"]
