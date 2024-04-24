@@ -11,19 +11,19 @@ Docker image for hosting static content efficiently. It is meant to be used as p
 
 ### Dockerfile
 ```dockerfile
-// multi-stage build example
+# multi-stage build example
 FROM ... AS build_client
-// do stuff 
+# do stuff 
 
 
-// set up nginx
+# set up nginx
 FROM ghcr.io/adibarra/nginx-static:latest AS nginx
 
-// copy configuration files and files to statically host
+# copy configuration files and files to statically host
 COPY nginx.conf /usr/local/nginx/conf/nginx.conf
 COPY --from=build_client /app/packages/client/dist /srv
 
-// run container
+# run container
 CMD ["/usr/local/nginx/sbin/nginx", "-g", "daemon off;"]
 ```
 
