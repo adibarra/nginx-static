@@ -4,7 +4,7 @@ ARG DEP_DEV="alpine-sdk zlib-dev pcre-dev openssl-dev gd-dev"
 RUN apk add --no-cache ${DEP_DEV}
 
 WORKDIR /build
-ARG NGINX=1.21.6
+ARG NGINX=1.26.0
 RUN curl https://nginx.org/download/nginx-${NGINX}.tar.gz | tar xz
 RUN mv nginx-${NGINX} nginx
 RUN git clone --recursive https://github.com/google/ngx_brotli.git
