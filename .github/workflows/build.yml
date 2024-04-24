@@ -1,4 +1,4 @@
-name: Matrix Cron Build
+name: Build Images
 
 on:
   workflow_dispatch:
