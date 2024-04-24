@@ -2,56 +2,10 @@ name: Matrix Cron Build
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 3 * * 1"
 
 jobs:
-  tags:
-    runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.fetcher.outputs.matrix }}
-    defaults:
-      run:
-        working-directory: tags
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      
-      - name: Install Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - uses: pnpm/action-setup@v3
-        name: Install pnpm
-        with:
-          version: latest
-          run_install: false
-
-      - name: Get pnpm store directory
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-      - uses: actions/cache@v4
-        name: Setup pnpm cache
-        with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Run script
-        run: node .
-
   build:
     runs-on: ubuntu-latest
-    needs: tags
-    strategy:
-      matrix: ${{fromJson(needs.tags.outputs.matrix)}}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -70,7 +24,6 @@ jobs:
         with:
           images: |
             ghcr.io/${{ github.repository }}
-          tags: ${{ matrix.tags }}
 
       - name: Log in to the Container registry
         uses: docker/login-action@v3
@@ -84,5 +37,3 @@ jobs:
         with:
           push: true
           platforms: linux/amd64,linux/arm64
-          build-args: NGINX=${{ matrix.version }}
-          tags: ${{ steps.meta.outputs.tags }}
