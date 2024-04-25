@@ -14,8 +14,8 @@ RUN git clone --recursive https://github.com/google/ngx_brotli.git
 
 # download headers-more module
 ARG HEADERS_MORE_VERSION=0.37
-RUN curl https://github.com/openresty/headers-more-nginx-module/archive/refs/tags/v{HEADERS_MORE_VERSION}.tar.gz | tar xz
-RUN mv headers-more-nginx-module-{HEADERS_MORE_VERSION} headers-more-nginx-module
+RUN curl https://github.com/openresty/headers-more-nginx-module/archive/refs/tags/v${HEADERS_MORE_VERSION}.tar.gz | tar xz
+RUN mv headers-more-nginx-module-${HEADERS_MORE_VERSION} headers-more-nginx-module
 
 WORKDIR /build/nginx
 # configure and build nginx
