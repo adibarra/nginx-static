@@ -1,4 +1,5 @@
 FROM alpine AS builder
+
 # download deps
 ARG DEP_BUILD="alpine-sdk zlib-dev pcre-dev openssl-dev gd-dev"
 RUN apk add --no-cache ${DEP_BUILD}
@@ -20,7 +21,8 @@ RUN make
 RUN make install
 
 
-FROM alpine
+FROM alpine AS runner
+
 # download deps
 ARG DEP_RUN="pcre openssl gd tzdata"
 
